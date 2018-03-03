@@ -63,4 +63,38 @@ function CashFlow () {
 
         return npv;
     };
+
+    // 計算淨終值
+    this.fv = function(cfs, n) {
+        if (typeof cfs != 'object') {
+            var allcf = this.list();
+            return this.fv(allcf, n);
+        }
+
+        var nfv = 0;
+        var n = Math.max(n, this.maxN());
+        for (var i in cfs) {
+            var cf = cfs[i];
+            cf.fv = cf.A * Math.pow(1 + 0.01 * cf.i, n - cf.n);
+            nfv += cf.fv;
+
+        }
+
+        return nfv;
+    };
+
+    // 取出最大期數
+    this.maxN = function(cfs) {
+        if (typeof cfs != 'object') {
+            var allcf = this.list();
+            return this.maxN(allcf);
+        }
+
+        var maxN = 0;
+        for (var i in cfs) {
+            var cf = cfs[i];
+            maxN = Math.max(maxN, cf.n);
+        }
+        return maxN;
+    }
 }
