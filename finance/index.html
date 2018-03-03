@@ -1,13 +1,57 @@
-<!DOCTYPE html>
 <html>
 <head>
     <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="../js/CashFlow.js"></script>
 </head>
 <body>
-    <input type="text" id="amount">
-    <input type="text" id="rate">
-    <input type="text" id="period">
+    <form id="add_cf">
+        金額：<input type="number" id="amount" step="0.01" placeholder="正數為流入，負數為流出"><br>
+        利率：<input type="text" id="rate" step="0.01" placeholder="省略'％'的百分比數字"><br>
+        開始：<input type="number" id="n_start" placeholder="現金流的開始時間"><br>
+        結束：<input type="number" id="n_end" placeholder="現金流的結束時間"><br>
+        <input type="button" id="add" value="新增">
+        <input type="button" id="list" value="列表">
+        <input type="button" id="pv" value="現值">
+        <input type="button" id="fv" value="終值">
+    </form>
+    <table>
+        <tr>
+        </tr>
+    </table>
+
 </body>
+
+<script type="text/javascript">
+$(function() {
+    myCF = new CashFlow();
+    $('#add').click(function () {
+        var A = parseFloat($('#amount').val());
+        var i = parseFloat($('#rate').val());
+        var n_start = parseInt($('#n_start').val()) || parseInt($('#n_end').val());
+        var n_end = parseInt($('#n_end').val()) || parseInt($('#n_start').val());
+
+        if (!(A && i && n_start && n_end)) {
+            console.log( "not ready!" );
+            return;
+        };
+
+        for (var k = n_start; k <= n_end; k++) {
+            myCF.add(A, i, k);
+        };
+    });
+
+    $('#list').click(function () {
+        console.log(myCF.list());
+    });
+    $('#pv').click(function () {
+        console.log(myCF.pv());
+    });
+    $('#fv').click(function () {
+        console.log(myCF.fv('', 10));
+    });
+});
+</script>
+
 </html>
