@@ -50,7 +50,7 @@ function CashFlow () {
 
     // 計算淨現值
     this.pv = function (cfs) {
-        if (typeof cfs == 'undefined') {
+        if (typeof cfs != 'object') {
             var allcf = this.list();
             return this.pv(allcf);
         }
@@ -58,7 +58,8 @@ function CashFlow () {
         var npv = 0;
         for (var i in cfs) {
             var cf = cfs[i];
-            npv += cf.A * Math.pow(1 + 0.01 * cf.i, -1 * cf.n);
+            cf.pv = cf.A * Math.pow(1 + 0.01 * cf.i, -1 * cf.n);
+            npv += cf.pv;
         }
 
         return npv;
